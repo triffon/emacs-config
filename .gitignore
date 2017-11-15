@@ -1,0 +1,2 @@
+# ignore byte-compiled files
+*.elc
