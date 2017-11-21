@@ -85,6 +85,9 @@
 (set-keyboard-coding-system 'mule-utf-8)
 (prefer-coding-system 'utf-8)
 
+;; set default value of enable-multibyte-characters to t, for some reason it is set to 1 by default
+(setq default-enable-multibyte-characters t)
+
 ;; ------------------------------------------------------------
 ;; Global key bindings
 ;; ------------------------------------------------------------
