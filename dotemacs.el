@@ -175,6 +175,10 @@ add_executable(" project " ${SOURCES})")
 ;; Package loading and configuration
 ;; ------------------------------------------------------------
 
+;; Diminish package for hiding minor modes
+(use-package diminish
+  :ensure t)
+
 ;; Muse: simple personal wiki
 (use-package muse-html
   :ensure muse
@@ -213,7 +217,8 @@ add_executable(" project " ${SOURCES})")
 ;; load company
 ;; always load on start, no deferred loading
 (use-package company
-  :ensure t)
+  :ensure t
+  :diminish company-mode)
 
 ;; Haskell definitions reused from:
 ;; https://github.com/serras/emacs-haskell-tutorial/blob/master/dot-emacs.el
@@ -322,6 +327,7 @@ add_executable(" project " ${SOURCES})")
 
 (use-package irony
   :ensure t
+  :diminish irony-mode
   ;; automatically load package when irony mode is triggerred
   :commands irony-mode
   :init
@@ -423,6 +429,7 @@ add_executable(" project " ${SOURCES})")
 ;; confivigure ivy
 (use-package ivy
   :ensure t
+  :diminish ivy-mode
   :config
   (ivy-mode 1)
   (setq ivy-use-virtual-buffers t)
