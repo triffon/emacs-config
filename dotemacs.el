@@ -142,6 +142,7 @@
 project(" project ")
 file(GLOB SOURCES \"*.cpp\")
 set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_CXX_STANDARD 11)
 add_executable(" project " ${SOURCES})")
      'utf-8
      (concat project-dir "/CMakeLists.txt"))
