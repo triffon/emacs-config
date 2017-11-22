@@ -298,7 +298,6 @@ add_executable(" project " ${SOURCES})")
   :defer 1
   :config
   (message "Loaded rtags")
-  ;; FIXME: rtags-diagnostics doesn't seem to work for me
   (setq rtags-autostart-diagnostics t)
   ;; use standard C-c r <key> keybindings
   (rtags-enable-standard-keybindings))
@@ -374,8 +373,10 @@ add_executable(" project " ${SOURCES})")
 ;; Setup automatic error highlighting via Flycheck
 ;; -----------------------------------------------
 
+;; Disabling flycheck wiht Irony, preferring rtags
 (use-package flycheck-irony
   :ensure t
+  :disabled
   ;; defer loading, will be loaded automatically via the flycheck hooks
   :defer t
   ;; setup flycheck
@@ -383,11 +384,9 @@ add_executable(" project " ${SOURCES})")
   (add-hook 'c-mode-common-hook 'flycheck-mode)
   (add-hook 'flycheck-mode-hook #'flycheck-irony-setup))
 
-;; FIXME: Flycheck does not work for me with RTags, disabling until I figure it out
 (use-package flycheck-rtags
   :ensure t
   :after flycheck
-  :disabled
   :init
   (defun my-flycheck-rtags-setup ()
     (flycheck-select-checker 'rtags)
