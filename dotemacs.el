@@ -16,7 +16,6 @@
  '(auctex-latexmk-inherit-TeX-PDF-mode t)
  '(company-ghc-show-info t)
  '(current-language-environment "UTF-8")
- '(default-enable-multibyte-characters 1 t)
  '(default-input-method "TeX")
  '(gdb-many-windows t)
  '(gdb-show-main t)
@@ -84,9 +83,6 @@
 ;; prefer UTF-8 by default
 (set-keyboard-coding-system 'mule-utf-8)
 (prefer-coding-system 'utf-8)
-
-;; set default value of enable-multibyte-characters to t, for some reason it is set to 1 by default
-(setq default-enable-multibyte-characters t)
 
 ;; ------------------------------------------------------------
 ;; Global key bindings
