@@ -149,6 +149,12 @@ add_executable(" project " ${SOURCES})")
     (find-file project-dir))
 )
 
+;; clean CMake project
+(defun cmake-clean-project ()
+  (interactive)
+  (delete-directory cmake-ide-build-dir t)
+  (message "Deleted %s" cmake-ide-build-dir))
+
 ;; resize emacs at startup according to resolution
 ;; based on http://stackoverflow.com/questions/92971/how-do-i-set-the-size-of-emacs-window
 (defun set-frame-size-according-to-resolution ()
@@ -226,30 +232,32 @@ add_executable(" project " ${SOURCES})")
 (use-package ghc
   :ensure t
   ;; FIXME: for some reason commands are not working correctly, need to debug
-  ;;  :commands (ghc-init ghc-debug)
-  :bind (:map haskell-mode-map
-              ;; Add F8 key combination for going to imports block
-              ([f8] . haskell-navigate-imports)
-              ;; Add key combinations for interactive haskell-mode
-              ("C-c C-l" . haskell-process-load-or-reload)
-              ("C-c C-z" . haskell-interactive-switch)
-              ("C-c C-n C-t" . haskell-process-do-type)
-              ("C-c C-n C-i" . haskell-process-do-info)
-              ("C-c C-n C-c" . haskell-process-cabal-build)
-              ("C-c C-n c" . haskell-process-cabal)
-              ("C-c C-o" . haskell-compile)
-              :map haskell-cabal-mode-map
-              ("C-c C-z" . haskell-interactive-switch)
-              ("C-c C-k" . haskell-interactive-mode-clear)
-              ("C-c C-c" . haskell-process-cabal-build)
-              ("C-c c" . haskell-process-cabal)
-              ("C-c C-o" . haskell-compile)))
+  ;; :commands (ghc-init ghc-debug)
+  ;; :bind (:map haskell-mode-map
+  ;;             ;; Add F8 key combination for going to imports block
+  ;;             ([f8] . haskell-navigate-imports)
+  ;;             ;; Add key combinations for interactive haskell-mode
+  ;;             ("C-c C-l" . haskell-process-load-or-reload)
+  ;;             ("C-c C-z" . haskell-interactive-switch)
+  ;;             ("C-c C-n C-t" . haskell-process-do-type)
+  ;;             ("C-c C-n C-i" . haskell-process-do-info)
+  ;;             ("C-c C-n C-c" . haskell-process-cabal-build)
+  ;;             ("C-c C-n c" . haskell-process-cabal)
+  ;;             ("C-c C-o" . haskell-compile)
+  ;;             :map haskell-cabal-mode-map
+  ;;             ("C-c C-z" . haskell-interactive-switch)
+  ;;             ("C-c C-k" . haskell-interactive-mode-clear)
+  ;;             ("C-c C-c" . haskell-process-cabal-build)
+  ;;             ("C-c c" . haskell-process-cabal)
+  ;;             ("C-c C-o" . haskell-compile)))
 ;; FIXME: The following hangs, so disable it for now
 ;;  :init
 ;;  (add-hook 'haskell-mode-hook (lambda () (ghc-init))))
+  )
 
 (use-package company-ghc
   :ensure t
+  :disabled
   ;; load immediately after GHC
   :after ghc
   :init
@@ -487,6 +495,11 @@ add_executable(" project " ${SOURCES})")
   ;; compile with latexmk by default
   (add-hook 'TeX-mode-hook
             '(lambda () (setq TeX-command-default "latexmk"))))
+
+;; DOT mode for displaying graphs via GraphViz
+(use-package graphviz-dot-mode
+  :ensure t
+  :mode "\\.dot\\'")
 
 ;; ------------------------------------------------------------
 ;; End of package loading and configuration
