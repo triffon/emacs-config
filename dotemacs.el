@@ -8,11 +8,11 @@
    (quote
     ("." "/usr/share/texmf/tex/" "/home/trifon/doc/tex/" "/home/trifon/doc/tex/packages/")))
  '(TeX-command-extra-options
-   "-outdir=out -pdflatex=\"pdflatex %O %%S && ln -sf %D %R.pdf\"")
+   "-outdir=out -pdflatex=\"pdflatex \"%O\" %%S && ln -sf \"%D\" \"%R\".pdf\"")
  '(TeX-insert-braces nil)
  '(TeX-source-correlate-mode t)
  '(TeX-source-correlate-start-server t)
- '(TeX-view-program-list (quote (("Evince" ("evince `readlink %o`") "evince"))))
+ '(TeX-view-program-list (quote (("Evince" ("evince `readlink \"%o\"`") "evince"))))
  '(auctex-latexmk-inherit-TeX-PDF-mode t)
  '(company-ghc-show-info t)
  '(current-language-environment "UTF-8")
@@ -39,7 +39,7 @@
  '(mouse-wheel-mode t nil (mwheel))
  '(package-selected-packages
    (quote
-    (ghc ivy-rtags counsel swiper ivy auctex company company-ghc haskell-mode use-package auctex-latexmk flycheck-ghcmod company-auctex f helm helm-rtags s flycheck-irony flycheck-rtags flycheck company-irony-c-headers company-irony irony company-rtags racket-mode cmake-ide rtags muse multiple-cursors magit json-mode graphviz-dot-mode)))
+    (diminish ghc ivy-rtags counsel swiper ivy auctex company company-ghc haskell-mode use-package auctex-latexmk flycheck-ghcmod company-auctex f helm helm-rtags s flycheck-irony flycheck-rtags flycheck company-irony-c-headers company-irony irony company-rtags racket-mode cmake-ide rtags muse multiple-cursors magit json-mode graphviz-dot-mode)))
  '(scheme-program-name "mzscheme")
  '(scroll-bar-mode (quote right))
  '(select-enable-clipboard t)
@@ -228,36 +228,31 @@ add_executable(" project " ${SOURCES})")
 
 ;; Haskell definitions reused from:
 ;; https://github.com/serras/emacs-haskell-tutorial/blob/master/dot-emacs.el
+;; based on
+;; https://github.com/serras/emacs-haskell-tutorial/blob/master/tutorial.md
+
+(use-package haskell-mode
+  :ensure t
+  :mode "\\.hs\\'"
+  :bind (:map haskell-mode-map
+              ;; Add F8 key combination for going to imports block
+              ([f8] . haskell-navigate-imports)
+              ;; Add key combinations for interactive haskell-mode
+              ("C-c C-l" . haskell-process-load-file)
+              ("C-c C-z" . haskell-interactive-switch)
+              ("C-c C-k" . haskell-interactive-mode-clear)))
 
 (use-package ghc
   :ensure t
-  ;; FIXME: for some reason commands are not working correctly, need to debug
-  ;; :commands (ghc-init ghc-debug)
-  ;; :bind (:map haskell-mode-map
-  ;;             ;; Add F8 key combination for going to imports block
-  ;;             ([f8] . haskell-navigate-imports)
-  ;;             ;; Add key combinations for interactive haskell-mode
-  ;;             ("C-c C-l" . haskell-process-load-or-reload)
-  ;;             ("C-c C-z" . haskell-interactive-switch)
-  ;;             ("C-c C-n C-t" . haskell-process-do-type)
-  ;;             ("C-c C-n C-i" . haskell-process-do-info)
-  ;;             ("C-c C-n C-c" . haskell-process-cabal-build)
-  ;;             ("C-c C-n c" . haskell-process-cabal)
-  ;;             ("C-c C-o" . haskell-compile)
-  ;;             :map haskell-cabal-mode-map
-  ;;             ("C-c C-z" . haskell-interactive-switch)
-  ;;             ("C-c C-k" . haskell-interactive-mode-clear)
-  ;;             ("C-c C-c" . haskell-process-cabal-build)
-  ;;             ("C-c c" . haskell-process-cabal)
-  ;;             ("C-c C-o" . haskell-compile)))
-;; FIXME: The following hangs, so disable it for now
-;;  :init
-;;  (add-hook 'haskell-mode-hook (lambda () (ghc-init))))
-  )
+  :after haskell-mode
+  :init
+  ;; fix faulty ghc-mod Ubuntu package: point ghc-mod to search for cabal-helper-wrapper in /usr/lib
+  (setenv "cabal_helper_libexecdir" "/usr/lib")
+  :config
+  (add-hook 'haskell-mode-hook (lambda () (ghc-init))))
 
 (use-package company-ghc
   :ensure t
-  :disabled
   ;; load immediately after GHC
   :after ghc
   :init
@@ -266,19 +261,6 @@ add_executable(" project " ${SOURCES})")
   :config
   ;; make sure that company-ghc is loaded before adding to company backends
   (add-to-list 'company-backends 'company-ghc))
-
-;; legacy Haskell definitions below for reference:
-
-;; setup Haskell interactive mode
-;; (require 'haskell-interactive-mode)
-;; (require 'haskell-process)
-;; (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
-
-;; setup Haskell bindings
-;; (define-key haskell-mode-map (kbd "C-`") 'haskell-interactive-bring)
-;; (define-key haskell-mode-map (kbd "SPC") 'haskell-mode-contextual-space)
-;; (define-key haskell-mode-map (kbd "C-c C-r") 'haskell-process-restart)
-
 
 ;; ==================
 ;; Emacs as a C++ IDE
