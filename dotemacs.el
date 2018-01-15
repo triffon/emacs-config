@@ -106,9 +106,9 @@
 (setq compilation-finish-function
       (lambda (buf str)
         (unless (string-match "exited abnormally" str)
-          ;;no errors, make the compilation window go away in a few seconds
+          ;;no errors, make the compilation window go away in one second
           (run-at-time
-           "2 sec" nil 'delete-windows-on
+           "1 sec" nil 'delete-windows-on
            (get-buffer-create "*compilation*"))
           (message "No Compilation Errors!"))))
 
