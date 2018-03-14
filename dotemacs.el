@@ -6,7 +6,7 @@
  '(TeX-PDF-mode t)
  '(TeX-check-path
    (quote
-    ("." "/usr/share/texmf/tex/" "/home/trifon/doc/tex/" "/home/trifon/doc/tex/packages/")))
+    ("." "/usr/share/texmf/tex/" "/home/trifon/doc/tex/" "/home/trifon/doc/tex/packages/" "/home/trifon/fmisync/Courses/mestgen/templates/")))
  '(TeX-command-extra-options
    "-outdir=out -pdflatex=\"pdflatex \"%O\" %%S && ln -sf \"%D\" \"%R\".pdf\"")
  '(TeX-insert-braces nil)
@@ -39,7 +39,7 @@
  '(mouse-wheel-mode t nil (mwheel))
  '(package-selected-packages
    (quote
-    (diminish ghc ivy-rtags counsel swiper ivy auctex company company-ghc haskell-mode use-package auctex-latexmk flycheck-ghcmod company-auctex f helm helm-rtags s flycheck-irony flycheck-rtags flycheck company-irony-c-headers company-irony irony company-rtags racket-mode cmake-ide rtags muse multiple-cursors magit json-mode graphviz-dot-mode)))
+    (csharp-mode diminish ghc ivy-rtags counsel swiper ivy auctex company company-ghc haskell-mode use-package auctex-latexmk flycheck-ghcmod company-auctex f helm helm-rtags s flycheck-irony flycheck-rtags flycheck company-irony-c-headers company-irony irony company-rtags racket-mode cmake-ide rtags muse multiple-cursors magit json-mode graphviz-dot-mode)))
  '(scheme-program-name "mzscheme")
  '(scroll-bar-mode (quote right))
  '(select-enable-clipboard t)
@@ -261,6 +261,11 @@ add_executable(" project " ${SOURCES})")
   :config
   ;; make sure that company-ghc is loaded before adding to company backends
   (add-to-list 'company-backends 'company-ghc))
+
+(use-package csharp-mode
+  :ensure t
+  :mode ("\\.cs\\'" . csharp-mode)
+  :interpreter ("csharp" . csharp-mode))
 
 ;; ==================
 ;; Emacs as a C++ IDE
