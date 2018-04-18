@@ -4,9 +4,6 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(TeX-PDF-mode t)
- '(TeX-check-path
-   (quote
-    ("." "/usr/share/texmf/tex/" "/home/trifon/doc/tex/" "/home/trifon/doc/tex/packages/" "/home/trifon/fmisync/Courses/mestgen/templates/")))
  '(TeX-command-extra-options
    "-outdir=out -pdflatex=\"pdflatex \"%O\" %%S && ln -sf \"%D\" \"%R\".pdf\"")
  '(TeX-insert-braces nil)
