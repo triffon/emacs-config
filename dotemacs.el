@@ -267,6 +267,10 @@ add_executable(" project " ${SOURCES})")
   :mode ("\\.cs\\'" . csharp-mode)
   :interpreter ("csharp" . csharp-mode))
 
+(use-package prolog
+  :ensure t
+  :mode ("\\.pro\\'" . prolog-mode))
+
 ;; ==================
 ;; Emacs as a C++ IDE
 ;; ==================
