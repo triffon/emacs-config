@@ -106,8 +106,7 @@
         (unless (string-match "exited abnormally" str)
           ;;no errors, make the compilation window go away in one second
           (run-at-time
-           "1 sec" nil 'delete-windows-on
-           (get-buffer-create "*compilation*"))
+           "1 sec" nil 'quit-windows-on (get-buffer-create "*compilation*"))
           (message "No Compilation Errors!"))))
 
 ;; ------------------------------------------------------------
