@@ -174,6 +174,50 @@ add_executable(" project " ${SOURCES})")
 		     (cons 'height (/ (- (x-display-pixel-height) 50)
 				      (frame-char-height)))))))
 
+;; --------------------------------
+;; GUD and GDB enhancement commands
+;; --------------------------------
+
+;; Starts GDB if not already started
+(defun gdb-start-if-needed ()
+  (interactive)
+  ;; check if the common GUD interactions buffer exists and has an active process
+  ;; if not, we should start GDB
+  (unless (and (boundp 'gud-comint-buffer)
+               (get-buffer-process gud-comint-buffer))
+    ;; assume the project was created by cmake-create-project
+    ;; in this case the project name is the same as the directory
+    ;; the buffer-local var cmake-ide-build-dir must be set already
+    ;; extract the project name from the path .../<project>/build/
+    ;; it should be the third path component from the end (the first one is the empty string)
+    (let ((project (cadr (cdr (reverse (split-string cmake-ide-build-dir "/"))))))
+      ;; launch gdb pointing to the project executable build/<project>
+      ;; enable the machine interface (-i=mi) for correct interaction
+      (gdb (concat "gdb -i=mi build/" project))
+      ;; let's make it easier to interact with GDB using menus and shortcuts
+      ;; and not by typing commands
+      ;; find the window of the common interactions buffer and switch to the buffer
+      ;; it was previously showing. Most likely it was a source file
+      (switch-to-prev-buffer (get-buffer-window gud-comint-buffer)))))
+
+;; Run project with or without tracing
+;; if the optional parameter break-at-start is non-nil, then the execution will pause
+;; at the beginning of the main function for manual stepping through the code
+(defun cmake-ide-run (&optional break-at-start)
+  (interactive)
+  ;; launch GDB if not launched yet
+  (gdb-start-if-needed)
+  ;; insert a temporary (one-time) breakpoint at the start of the main function
+  (if break-at-start
+      (gud-call "tbreak main"))
+  ;; run the executable through GDB
+  (gud-call "run"))
+
+;; A shortcut command to run the project with tracing enabled
+(defun cmake-ide-debug ()
+  (interactive)
+  (cmake-ide-run t))
+
 ;; ------------------------------------------------------------
 ;; Package loading and configuration
 ;; ------------------------------------------------------------
@@ -397,6 +441,18 @@ add_executable(" project " ${SOURCES})")
   :ensure t
   :defer t)
 
+;; --------------------------------
+;; Setup debugging with GUD and GDB
+;; --------------------------------
+
+(use-package gdb
+  :ensure nil
+  ;; activated by the gdb command
+  :commands gdb
+  ;; configure keybindings for tracing
+  :bind ([f7] . gud-step)
+  :bind ([f8] . gud-next))
+
 ;; ---------------
 ;; setup CMake IDE
 ;; ---------------
@@ -408,6 +464,9 @@ add_executable(" project " ${SOURCES})")
   :defer 2
   ;; replace compile keybinding for CMake projects
   :bind ([f12] . cmake-ide-compile)
+  ;; setup run and debug keybindings
+  :bind ([f5]  . cmake-ide-run)
+  :bind ([C-f5]  . cmake-ide-debug)
   :init
   ;; by default always set the cmake-ide-build-dir variable to <default-directory>/build
   (defun set-cmake-ide-build-dir ()
