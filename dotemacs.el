@@ -21,6 +21,16 @@
  '(global-magit-file-mode t)
  '(gud-tooltip-mode t)
  '(haskell-mode-hook (quote (turn-on-haskell-indentation)) t)
+ '(haskell-process-args-cabal-new-repl
+   (quote
+    ("--ghc-options=-ferror-spans -fshow-loaded-modules")))
+ '(haskell-process-args-cabal-repl
+   (quote
+    ("--ghc-options=-ferror-spans -fshow-loaded-modules")))
+ '(haskell-process-args-ghci (quote ("-ferror-spans -fshow-loaded-modules")))
+ '(haskell-process-args-stack-ghci
+   (quote
+    ("--ghci-options=-ferror-spans -fshow-loaded-modules" "--no-build" "--no-load")))
  '(haskell-process-auto-import-loaded-modules t)
  '(haskell-process-log t)
  '(haskell-process-suggest-remove-import-lines t)
@@ -283,7 +293,9 @@ add_executable(" project " ${SOURCES})")
               ("C-c C-z" . haskell-interactive-switch)
               ("C-c C-k" . haskell-interactive-mode-clear)))
 
+;; Disabling ghc-mod is not compatible with GHCI 8.2.x
 (use-package ghc
+  :disabled
   :ensure t
   :after haskell-mode
   :init
@@ -292,7 +304,9 @@ add_executable(" project " ${SOURCES})")
   :config
   (add-hook 'haskell-mode-hook (lambda () (ghc-init))))
 
+;; Disabling ghc-mod is not compatible with GHCI 8.2.x
 (use-package company-ghc
+  :disabled
   :ensure t
   ;; load immediately after GHC
   :after ghc
