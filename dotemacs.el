@@ -4,12 +4,10 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(TeX-PDF-mode t)
- '(TeX-command-extra-options
-   "-outdir=out -pdflatex=\"pdflatex \"%O\" %%S && ln -sf \"%D\" \"%R\".pdf\"")
  '(TeX-insert-braces nil)
  '(TeX-source-correlate-mode t)
  '(TeX-source-correlate-start-server t)
- '(TeX-view-program-list (quote (("Evince" ("evince `readlink \"%o\"`") "evince"))))
+ '(TeX-view-program-list (quote (("Evince" ("evince `realpath \"%o\"`") "evince"))))
  '(auctex-latexmk-inherit-TeX-PDF-mode t)
  '(company-ghc-show-info t)
  '(current-language-environment "UTF-8")
