@@ -226,6 +226,17 @@ add_executable(" project " ${SOURCES})")
   (interactive)
   (cmake-ide-run t))
 
+;; Toggle gdb-many-windows
+(defun toggle-gdb-many-windows ()
+  (interactive)
+  (if gdb-many-windows
+      (progn
+        (message "Switching to simple debug mode")
+        (setq gdb-many-windows nil))
+    (progn
+      (message "Switching to advanced debug mode")
+      (setq gdb-many-windows t))))
+
 ;; ------------------------------------------------------------
 ;; Package loading and configuration
 ;; ------------------------------------------------------------
@@ -463,7 +474,8 @@ add_executable(" project " ${SOURCES})")
   :commands gdb
   ;; configure keybindings for tracing
   :bind ([f7] . gud-step)
-  :bind ([f8] . gud-next))
+  :bind ([f8] . gud-next)
+  :bind ([f9] . toggle-gdb-many-windows))
 
 ;; ---------------
 ;; setup CMake IDE
