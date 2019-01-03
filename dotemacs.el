@@ -226,16 +226,14 @@ add_executable(" project " ${SOURCES})")
   (interactive)
   (cmake-ide-run t))
 
-;; Toggle gdb-many-windows
-(defun toggle-gdb-many-windows ()
+;; Quit debugger
+(defun quit-debugger ()
   (interactive)
-  (if gdb-many-windows
-      (progn
-        (message "Switching to simple debug mode")
-        (setq gdb-many-windows nil))
-    (progn
-      (message "Switching to advanced debug mode")
-      (setq gdb-many-windows t))))
+  (setq kill-buffer-query-functions
+        (remq 'process-kill-buffer-query-function
+              kill-buffer-query-functions))
+  (delete-window (get-buffer-window gud-comint-buffer))
+  (kill-buffer gud-comint-buffer))
 
 ;; ------------------------------------------------------------
 ;; Package loading and configuration
@@ -473,9 +471,10 @@ add_executable(" project " ${SOURCES})")
   ;; activated by the gdb command
   :commands gdb
   ;; configure keybindings for tracing
+  :bind ([f6] . quit-debugger)
   :bind ([f7] . gud-step)
   :bind ([f8] . gud-next)
-  :bind ([f9] . toggle-gdb-many-windows))
+  :bind ([f9] . gdb-many-windows))
 
 ;; ---------------
 ;; setup CMake IDE
