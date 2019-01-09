@@ -182,6 +182,15 @@ add_executable(" project " ${SOURCES})")
 		     (cons 'height (/ (- (x-display-pixel-height) 50)
 				      (frame-char-height)))))))
 
+;; URL decode region
+;; Source: http://www.blogbyben.com/2010/08/handy-emacs-function-url-decode-region.html
+(defun url-decode-region (start end)
+  "Replace a region with the same contents, only URL decoded."
+  (interactive "r")
+  (let ((text (url-unhex-string (buffer-substring start end))))
+    (delete-region start end)
+    (insert text)))
+
 ;; --------------------------------
 ;; GUD and GDB enhancement commands
 ;; --------------------------------
