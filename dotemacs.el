@@ -44,7 +44,7 @@
  '(mouse-wheel-mode t nil (mwheel))
  '(package-selected-packages
    (quote
-    (csharp-mode diminish ghc ivy-rtags counsel swiper ivy auctex company company-ghc haskell-mode use-package auctex-latexmk flycheck-ghcmod company-auctex f helm helm-rtags s flycheck-irony flycheck-rtags flycheck company-irony-c-headers company-irony irony company-rtags racket-mode cmake-ide rtags muse multiple-cursors magit json-mode graphviz-dot-mode)))
+    (yaml-mode csharp-mode diminish ghc ivy-rtags counsel swiper ivy auctex company company-ghc haskell-mode use-package auctex-latexmk flycheck-ghcmod company-auctex f helm helm-rtags s flycheck-irony flycheck-rtags flycheck company-irony-c-headers company-irony irony company-rtags racket-mode cmake-ide rtags muse multiple-cursors magit json-mode graphviz-dot-mode)))
  '(python-shell-interpreter "python3")
  '(scheme-program-name "mzscheme")
  '(scroll-bar-mode (quote right))
@@ -579,6 +579,11 @@ add_executable(" project " ${SOURCES})")
 (use-package graphviz-dot-mode
   :ensure t
   :mode "\\.dot\\'")
+
+;; Mode for YAML files
+(use-package yaml-mode
+  :ensure t
+  :mode "\\.yaml\\'")
 
 ;; ------------------------------------------------------------
 ;; End of package loading and configuration
