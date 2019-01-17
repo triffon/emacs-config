@@ -37,7 +37,6 @@
  '(indent-tabs-mode nil)
  '(inhibit-startup-screen t)
  '(initial-scratch-message nil)
- '(ispell-personal-dictionary "~/.emacs.d/.aspell.bg.pws")
  '(latex-run-command "pdflatex")
  '(minlog-el-path "~/minlog")
  '(minlog-path "~/minlog")
