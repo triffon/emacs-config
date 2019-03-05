@@ -541,10 +541,10 @@ add_executable(" project " ${SOURCES})")
          ("<f2> u" . counsel-unicode-char)))
 
 ;; configure AucTeX
-(use-package tex-site
+(use-package tex
   ;; will be loaded automatically by a TeX mode hook
   :defer t
-  ;; package name is tex-site, which is different from feature name: auctex
+  ;; package name is tex, which is different from feature name: auctex
   :ensure auctex
   :config
   ;; Load support for different style files in AucTeX
@@ -553,7 +553,9 @@ add_executable(" project " ${SOURCES})")
   ;; avoid prompting for the TeX master file
   (setq-default TeX-master t)
   ;; enable flyspell for TeX files
-  (add-hook 'TeX-mode-hook 'turn-on-flyspell))
+  (add-hook 'TeX-mode-hook 'turn-on-flyspell)
+  ;; turn on beamer mode for the beamerswitch package
+  (TeX-add-style-hook "beamerswitch" (lambda () (TeX-run-style-hooks "beamer")) :latex))
 
 ;; enable autocompletion in AucTeX
 ;; needs to be done *after* all other company backends ar loaded
