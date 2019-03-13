@@ -9,6 +9,7 @@
  '(TeX-source-correlate-start-server t)
  '(TeX-view-program-list (quote (("Evince" ("evince `realpath \"%o\"`") "evince"))))
  '(auctex-latexmk-inherit-TeX-PDF-mode t)
+ '(comint-process-echoes t)
  '(company-ghc-show-info t)
  '(current-language-environment "UTF-8")
  '(default-input-method "TeX")
