@@ -47,7 +47,7 @@
  '(mouse-wheel-mode t nil (mwheel))
  '(package-selected-packages
    (quote
-    (scala-mode scala yaml-mode csharp-mode diminish ghc ivy-rtags counsel swiper ivy auctex company company-ghc haskell-mode use-package auctex-latexmk flycheck-ghcmod company-auctex f helm helm-rtags s flycheck-irony flycheck-rtags flycheck company-irony-c-headers company-irony irony company-rtags racket-mode cmake-ide rtags muse multiple-cursors magit json-mode graphviz-dot-mode)))
+    (perl6-mode rust-mode scala-mode scala yaml-mode csharp-mode diminish ghc ivy-rtags counsel swiper ivy auctex company company-ghc haskell-mode use-package auctex-latexmk flycheck-ghcmod company-auctex f helm helm-rtags s flycheck-irony flycheck-rtags flycheck company-irony-c-headers company-irony irony company-rtags racket-mode cmake-ide rtags muse multiple-cursors magit json-mode graphviz-dot-mode)))
  '(python-shell-interpreter "python3")
  '(scheme-program-name "mzscheme")
  '(scroll-bar-mode (quote right))
@@ -348,6 +348,14 @@ add_executable(" project " ${SOURCES})")
 (use-package scala-mode
   :ensure t
   :mode ("\\.scala\\'" . scala-mode))
+
+(use-package rust-mode
+  :ensure t
+  :mode ("\\.rs\\'" . rust-mode))
+
+(use-package perl6-mode
+  :ensure t
+  :defer t)
 
 ;; ==================
 ;; Emacs as a C++ IDE
