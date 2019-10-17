@@ -202,12 +202,18 @@ add_executable(" project " ${SOURCES})")
 ;; --------------------------------
 
 ;; Starts GDB if not already started
-(defun gdb-start-if-needed ()
+(defun gdb-start-stop ()
   (interactive)
   ;; check if the common GUD interactions buffer exists and has an active process
   ;; if not, we should start GDB
-  (unless (and (boundp 'gud-comint-buffer)
-               (get-buffer-process gud-comint-buffer))
+  (if (and (boundp 'gud-comint-buffer)
+           (get-buffer-process gud-comint-buffer))
+      (progn
+        ;; if started, stop it
+        (quit-debugger)
+        ;; return nil to signal to the calling function that gdb is now stopped
+        nil)
+    (progn
     ;; assume the project was created by cmake-create-project
     ;; in this case the project name is the same as the directory
     ;; the buffer-local var cmake-ide-build-dir must be set already
@@ -221,20 +227,21 @@ add_executable(" project " ${SOURCES})")
       ;; and not by typing commands
       ;; find the window of the common interactions buffer and switch to the buffer
       ;; it was previously showing. Most likely it was a source file
-      (switch-to-prev-buffer (get-buffer-window gud-comint-buffer)))))
+      (switch-to-prev-buffer (get-buffer-window gud-comint-buffer))))))
 
 ;; Run project with or without tracing
 ;; if the optional parameter break-at-start is non-nil, then the execution will pause
 ;; at the beginning of the main function for manual stepping through the code
 (defun cmake-ide-run (&optional break-at-start)
   (interactive)
-  ;; launch GDB if not launched yet
-  (gdb-start-if-needed)
-  ;; insert a temporary (one-time) breakpoint at the start of the main function
-  (if break-at-start
-      (gud-call "tbreak main"))
-  ;; run the executable through GDB
-  (gud-call "run"))
+  ;; launch GDB if not launched yet, or stop it otherwise
+  (if (gdb-start-stop)
+      (progn
+        ;; insert a temporary (one-time) breakpoint at the start of the main function
+        (if break-at-start
+            (gud-call "tbreak main"))
+        ;; run the executable through GDB
+        (gud-call "run"))))
 
 ;; A shortcut command to run the project with tracing enabled
 (defun cmake-ide-debug ()
@@ -498,7 +505,6 @@ add_executable(" project " ${SOURCES})")
   ;; activated by the gdb command
   :commands gdb
   ;; configure keybindings for tracing
-  :bind ([f6] . quit-debugger)
   :bind ([f7] . gud-step)
   :bind ([f8] . gud-next)
   :bind ([f9] . gdb-many-windows))
