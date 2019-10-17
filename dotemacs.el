@@ -66,7 +66,7 @@
 ;; Package setup
 ;; ------------------------------------------------------------
 
-;; temporary fix for Bad Request issue when fetching ELPA package list
+;; temporary fix for Bad Request issue when fetching ELPA package list until Emacs 26.3 comes out
 (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 
 ;; load custom packages from here
@@ -135,7 +135,7 @@
 ; presentation mode
 (defun present ()
   (interactive)
-  (set-face-attribute 'default nil :height 160))
+  (set-face-attribute 'default nil :height 240))
 
 ;; create new CMakeLists.txt
 (defun cmake-create-project (project dir)
