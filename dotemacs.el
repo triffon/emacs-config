@@ -251,10 +251,13 @@ add_executable(" project " ${SOURCES})")
 ;; Quit debugger
 (defun quit-debugger ()
   (interactive)
+  (message "Quitting current debugger session")
   (setq kill-buffer-query-functions
         (remq 'process-kill-buffer-query-function
               kill-buffer-query-functions))
-  (delete-window (get-buffer-window gud-comint-buffer))
+  (if (> (length (window-list)) 1)
+      ;; delete debugger window only if it is not the sole window
+      (delete-window (get-buffer-window gud-comint-buffer)))
   (kill-buffer gud-comint-buffer))
 
 ;; ------------------------------------------------------------
