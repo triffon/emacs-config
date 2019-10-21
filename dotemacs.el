@@ -208,20 +208,22 @@ add_executable(" project " ${SOURCES})")
   ;; if not, we should start GDB
   (unless (and (boundp 'gud-comint-buffer)
                (get-buffer-process gud-comint-buffer))
-    ;; assume the project was created by cmake-create-project
-    ;; in this case the project name is the same as the directory
-    ;; the buffer-local var cmake-ide-build-dir must be set already
-    ;; extract the project name from the path .../<project>/build/
-    ;; it should be the third path component from the end (the first one is the empty string)
-    (let ((project (cadr (cdr (reverse (split-string cmake-ide-build-dir "/"))))))
-      ;; launch gdb pointing to the project executable build/<project>
-      ;; enable the machine interface (-i=mi) for correct interaction
-      (gdb (concat "gdb -i=mi build/" project))
-      ;; let's make it easier to interact with GDB using menus and shortcuts
-      ;; and not by typing commands
-      ;; find the window of the common interactions buffer and switch to the buffer
-      ;; it was previously showing. Most likely it was a source file
-      (switch-to-prev-buffer (get-buffer-window gud-comint-buffer)))))
+    (if cmake-ide-build-dir
+        ;; assume the project was created by cmake-create-project
+        ;; in this case the project name is the same as the directory
+        ;; the buffer-local var cmake-ide-build-dir must be set already
+        ;; extract the project name from the path .../<project>/build/
+        ;; it should be the third path component from the end (the first one is the empty string)
+        (let ((project (cadr (cdr (reverse (split-string cmake-ide-build-dir "/"))))))
+          ;; launch gdb pointing to the project executable build/<project>
+          ;; enable the machine interface (-i=mi) for correct interaction
+          (gdb (concat "gdb -i=mi build/" project))
+          ;; let's make it easier to interact with GDB using menus and shortcuts
+          ;; and not by typing commands
+          ;; find the window of the common interactions buffer and switch to the buffer
+          ;; it was previously showing. Most likely it was a source file
+          (switch-to-prev-buffer (get-buffer-window gud-comint-buffer)))
+      (message "Could not identify project directory!"))))
 
 ;; Run project with or without tracing
 ;; if the optional parameter break-at-start is non-nil, then the execution will pause
@@ -505,7 +507,6 @@ add_executable(" project " ${SOURCES})")
   ;; activated by the gdb command
   :commands gdb
   ;; configure keybindings for tracing
-  :bind ([f6] . quit-debugger)
   :bind ([f7] . gud-step)
   :bind ([f8] . gud-next)
   :bind ([f9] . gdb-many-windows))
@@ -523,6 +524,7 @@ add_executable(" project " ${SOURCES})")
   :bind ([f12] . cmake-ide-compile)
   ;; setup run and debug keybindings
   :bind ([f5]  . cmake-ide-run)
+  :bind ([S-f5]  . quit-debugger)
   :bind ([C-f5]  . cmake-ide-debug)
   :init
   ;; by default always set the cmake-ide-build-dir variable to <default-directory>/build
