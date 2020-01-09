@@ -7,7 +7,11 @@
  '(TeX-insert-braces nil)
  '(TeX-source-correlate-mode t)
  '(TeX-source-correlate-start-server t)
- '(TeX-view-program-list (quote (("Evince" ("evince `realpath \"%o\"`") "evince"))))
+ '(TeX-view-program-list
+   (quote
+    (("Evince"
+      ("evince \"`realpath \"%o\"`\"")
+      "evince"))))
  '(auctex-latexmk-inherit-TeX-PDF-mode t)
  '(comint-process-echoes t)
  '(company-ghc-show-info t)
@@ -19,35 +23,25 @@
  '(global-font-lock-mode t nil (font-lock))
  '(global-magit-file-mode t)
  '(gud-tooltip-mode t)
- '(haskell-mode-hook (quote (turn-on-haskell-indentation)) t)
- '(haskell-process-args-cabal-new-repl
-   (quote
-    ("--ghc-options=-ferror-spans -fshow-loaded-modules")))
- '(haskell-process-args-cabal-repl
-   (quote
-    ("--ghc-options=-ferror-spans -fshow-loaded-modules")))
- '(haskell-process-args-ghci (quote ("-ferror-spans -fshow-loaded-modules")))
- '(haskell-process-args-stack-ghci
-   (quote
-    ("--ghci-options=-ferror-spans -fshow-loaded-modules" "--no-build" "--no-load")))
+ '(haskell-mode-hook (quote (turn-on-haskell-indentation)))
+ '(haskell-process-args-ghci (quote ("-ferror-spans" "-fshow-loaded-modules")))
  '(haskell-process-auto-import-loaded-modules t)
  '(haskell-process-log t)
  '(haskell-process-suggest-remove-import-lines t)
- '(haskell-process-type (quote cabal-repl))
+ '(haskell-process-type (quote ghci))
  '(haskell-tags-on-save t)
  '(indent-tabs-mode nil)
  '(inhibit-startup-screen t)
  '(initial-scratch-message nil)
- '(ispell-dictionary "bg-w_english")
- '(ispell-highlight-face (quote flyspell-incorrect))
- '(ispell-program-name "aspell")
+ '(ispell-dictionary "bg_BG,en_US")
+ '(ispell-program-name "hunspell")
  '(latex-run-command "pdflatex")
  '(minlog-el-path "~/minlog")
  '(minlog-path "~/minlog")
  '(mouse-wheel-mode t nil (mwheel))
  '(package-selected-packages
    (quote
-    (neotree markdown-mode perl6-mode rust-mode scala-mode scala yaml-mode csharp-mode diminish ghc ivy-rtags counsel swiper ivy auctex company company-ghc haskell-mode use-package auctex-latexmk flycheck-ghcmod company-auctex f helm helm-rtags s flycheck-irony flycheck-rtags flycheck company-irony-c-headers company-irony irony company-rtags racket-mode cmake-ide rtags muse multiple-cursors magit json-mode graphviz-dot-mode)))
+    (exec-path-from-shell lsp-haskell lsp-treemacs company-lsp lsp-ui lsp-mode neotree markdown-mode perl6-mode rust-mode scala-mode scala yaml-mode csharp-mode diminish ghc ivy-rtags counsel swiper ivy auctex company company-ghc haskell-mode use-package auctex-latexmk flycheck-ghcmod company-auctex f helm helm-rtags s flycheck-irony flycheck-rtags flycheck company-irony-c-headers company-irony irony company-rtags racket-mode cmake-ide rtags muse multiple-cursors magit json-mode graphviz-dot-mode)))
  '(python-shell-interpreter "python3")
  '(scheme-program-name "mzscheme")
  '(scroll-bar-mode (quote right))
@@ -259,6 +253,21 @@ add_executable(" project " ${SOURCES})")
 ;; Package loading and configuration
 ;; ------------------------------------------------------------
 
+;; Use SSH_AUTH_SOCK environment variable as available from an interactive shell
+(use-package exec-path-from-shell
+  :ensure t
+  :config
+  (exec-path-from-shell-initialize)
+  (exec-path-from-shell-copy-env "SSH_AUTH_SOCK"))
+
+(use-package ispell
+  :defer t
+  :config
+  ;; enable hunspell for multiple dictionaries
+  ;; source: https://emacs.stackexchange.com/a/21379
+  (ispell-set-spellchecker-params)
+  (ispell-hunspell-add-multi-dic "bg_BG,en_US"))
+
 ;; Diminish package for hiding minor modes
 (use-package diminish
   :ensure t)
@@ -319,30 +328,6 @@ add_executable(" project " ${SOURCES})")
               ("C-c C-l" . haskell-process-load-file)
               ("C-c C-z" . haskell-interactive-switch)
               ("C-c C-k" . haskell-interactive-mode-clear)))
-
-;; Disabling ghc-mod is not compatible with GHCI 8.2.x
-(use-package ghc
-  :disabled
-  :ensure t
-  :after haskell-mode
-  :init
-  ;; fix faulty ghc-mod Ubuntu package: point ghc-mod to search for cabal-helper-wrapper in /usr/lib
-  (setenv "cabal_helper_libexecdir" "/usr/lib")
-  :config
-  (add-hook 'haskell-mode-hook (lambda () (ghc-init))))
-
-;; Disabling ghc-mod is not compatible with GHCI 8.2.x
-(use-package company-ghc
-  :disabled
-  :ensure t
-  ;; load immediately after GHC
-  :after ghc
-  :init
-  ;; Use company in Haskell buffers
-  (add-hook 'haskell-mode-hook 'company-mode)
-  :config
-  ;; make sure that company-ghc is loaded before adding to company backends
-  (add-to-list 'company-backends 'company-ghc))
 
 (use-package csharp-mode
   :ensure t
