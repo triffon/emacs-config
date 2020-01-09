@@ -367,7 +367,7 @@ add_executable(" project " ${SOURCES})")
 
 (use-package neotree
   :ensure t
-  :bind ([f6] . neotree-toggle))
+  :bind ([f9] . neotree-toggle))
 
 ;; ==================
 ;; Emacs as a C++ IDE
@@ -509,7 +509,7 @@ add_executable(" project " ${SOURCES})")
   ;; configure keybindings for tracing
   :bind ([f7] . gud-step)
   :bind ([f8] . gud-next)
-  :bind ([f9] . gdb-many-windows))
+  :bind ([C-S-f5] . gdb-many-windows))
 
 ;; ---------------
 ;; setup CMake IDE
