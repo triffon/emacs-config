@@ -13,6 +13,13 @@
       ("evince \"`realpath \"%o\"`\"")
       "evince"))))
  '(auctex-latexmk-inherit-TeX-PDF-mode t)
+ '(c-default-style
+   (quote
+    ((c-mode . "stroustrup")
+     (c++-mode . "stroustrup")
+     (java-mode . "java")
+     (awk-mode . "awk")
+     (other . "gnu"))))
  '(comint-process-echoes t)
  '(company-ghc-show-info t)
  '(current-language-environment "UTF-8")
