@@ -48,7 +48,7 @@
  '(mouse-wheel-mode t nil (mwheel))
  '(package-selected-packages
    (quote
-    (exec-path-from-shell lsp-haskell lsp-treemacs company-lsp lsp-ui lsp-mode neotree markdown-mode perl6-mode rust-mode scala-mode scala yaml-mode csharp-mode diminish ghc ivy-rtags counsel swiper ivy auctex company company-ghc haskell-mode use-package auctex-latexmk flycheck-ghcmod company-auctex f helm helm-rtags s flycheck-irony flycheck-rtags flycheck company-irony-c-headers company-irony irony company-rtags racket-mode cmake-ide rtags muse multiple-cursors magit json-mode graphviz-dot-mode)))
+    (agda-mode exec-path-from-shell lsp-haskell lsp-treemacs company-lsp lsp-ui lsp-mode neotree markdown-mode perl6-mode rust-mode scala-mode scala yaml-mode csharp-mode diminish ghc ivy-rtags counsel swiper ivy auctex company company-ghc haskell-mode use-package auctex-latexmk flycheck-ghcmod company-auctex f helm helm-rtags s flycheck-irony flycheck-rtags flycheck company-irony-c-headers company-irony irony company-rtags racket-mode cmake-ide rtags muse multiple-cursors magit json-mode graphviz-dot-mode)))
  '(python-shell-interpreter "python3")
  '(scheme-program-name "mzscheme")
  '(scroll-bar-mode (quote right))
@@ -360,6 +360,10 @@ add_executable(" project " ${SOURCES})")
 (use-package neotree
   :ensure t
   :bind ([f9] . neotree-toggle))
+
+(use-package agda2-mode
+  :ensure t
+  :mode "\\.agda\\'")
 
 ;; ==================
 ;; Emacs as a C++ IDE
