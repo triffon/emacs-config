@@ -20,7 +20,6 @@
      (java-mode . "java")
      (awk-mode . "awk")
      (other . "gnu"))))
- '(comint-process-echoes t)
  '(company-ghc-show-info t)
  '(current-language-environment "UTF-8")
  '(default-input-method "TeX")
@@ -219,6 +218,10 @@ add_executable(" project " ${SOURCES})")
           ;; launch gdb pointing to the project executable build/<project>
           ;; enable the machine interface (-i=mi) for correct interaction
           (gdb (concat "gdb -i=mi build/" project))
+          ;; set comint-process-echoes to true for the GDB inferior I/O buffer
+          ;; to avoid annoying double echo on input
+          (with-current-buffer (gdb-get-buffer 'gdb-inferior-io)
+            (setq comint-process-echoes t))
           ;; let's make it easier to interact with GDB using menus and shortcuts
           ;; and not by typing commands
           ;; find the window of the common interactions buffer and switch to the buffer
