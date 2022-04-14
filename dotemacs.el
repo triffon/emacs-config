@@ -7,19 +7,14 @@
  '(TeX-insert-braces nil)
  '(TeX-source-correlate-mode t)
  '(TeX-source-correlate-start-server t)
- '(TeX-view-program-list
-   (quote
-    (("Evince"
-      ("evince \"`realpath \"%o\"`\"")
-      "evince"))))
+ '(TeX-view-program-list '(("Evince" ("evince \"`realpath \"%o\"`\"") "evince")))
  '(auctex-latexmk-inherit-TeX-PDF-mode t)
  '(c-default-style
-   (quote
-    ((c-mode . "stroustrup")
+   '((c-mode . "stroustrup")
      (c++-mode . "stroustrup")
      (java-mode . "java")
      (awk-mode . "awk")
-     (other . "gnu"))))
+     (other . "gnu")))
  '(company-ghc-show-info t)
  '(current-language-environment "UTF-8")
  '(default-input-method "TeX")
@@ -27,14 +22,13 @@
  '(gdb-show-main t)
  '(global-auto-revert-mode t)
  '(global-font-lock-mode t nil (font-lock))
- '(global-magit-file-mode t)
  '(gud-tooltip-mode t)
- '(haskell-mode-hook (quote (turn-on-haskell-indentation)))
- '(haskell-process-args-ghci (quote ("-ferror-spans" "-fshow-loaded-modules")))
+ '(haskell-mode-hook '(turn-on-haskell-indentation))
+ '(haskell-process-args-ghci '("-ferror-spans" "-fshow-loaded-modules"))
  '(haskell-process-auto-import-loaded-modules t)
  '(haskell-process-log t)
  '(haskell-process-suggest-remove-import-lines t)
- '(haskell-process-type (quote ghci))
+ '(haskell-process-type 'ghci)
  '(haskell-tags-on-save t)
  '(indent-tabs-mode nil)
  '(inhibit-startup-screen t)
@@ -42,18 +36,19 @@
  '(ispell-dictionary "bg_BG,en_US")
  '(ispell-program-name "hunspell")
  '(latex-run-command "pdflatex")
+ '(magit-define-global-key-bindings t)
  '(minlog-el-path "~/minlog")
  '(minlog-path "~/minlog")
  '(mouse-wheel-mode t nil (mwheel))
  '(package-selected-packages
-   (quote
-    (agda-mode exec-path-from-shell lsp-haskell lsp-treemacs company-lsp lsp-ui lsp-mode neotree markdown-mode perl6-mode rust-mode scala-mode scala yaml-mode csharp-mode diminish ghc ivy-rtags counsel swiper ivy auctex company company-ghc haskell-mode use-package auctex-latexmk flycheck-ghcmod company-auctex f helm helm-rtags s flycheck-irony flycheck-rtags flycheck company-irony-c-headers company-irony irony company-rtags racket-mode cmake-ide rtags muse multiple-cursors magit json-mode graphviz-dot-mode)))
+   '(adoc-mode agda2-mode agda-mode exec-path-from-shell lsp-haskell lsp-treemacs company-lsp lsp-ui lsp-mode neotree markdown-mode perl6-mode rust-mode scala-mode scala yaml-mode csharp-mode diminish ghc ivy-rtags counsel swiper ivy auctex company company-ghc haskell-mode use-package auctex-latexmk flycheck-ghcmod company-auctex f helm helm-rtags s flycheck-irony flycheck-rtags flycheck company-irony-c-headers company-irony irony company-rtags racket-mode cmake-ide rtags muse multiple-cursors magit json-mode graphviz-dot-mode))
  '(python-shell-interpreter "python3")
  '(scheme-program-name "mzscheme")
- '(scroll-bar-mode (quote right))
+ '(scroll-bar-mode 'right)
  '(select-enable-clipboard t)
  '(sentence-end "[.?!][]\"')}]*\\($\\| $\\|	\\| \\)[
-]*"))
+]*")
+ '(sgml-basic-offset 8))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
