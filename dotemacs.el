@@ -368,6 +368,12 @@ add_executable(" project " ${SOURCES})")
   :ensure t
   :mode "\\.agda\\'")
 
+(use-package adoc-mode
+  :ensure t
+  :mode (("\\.adoc\\'" . adoc-mode)
+	 ("\\.asciidoc\\'" . adoc-mode)
+	 ("\\.txt\\'" . adoc-mode)))
+
 ;; ==================
 ;; Emacs as a C++ IDE
 ;; ==================
