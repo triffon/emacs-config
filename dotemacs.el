@@ -17,7 +17,6 @@
      (other . "gnu")))
  '(company-ghc-show-info t)
  '(current-language-environment "UTF-8")
- '(default-input-method "TeX")
  '(gdb-many-windows t)
  '(gdb-show-main t)
  '(global-auto-revert-mode t)
@@ -84,12 +83,15 @@
   (require 'use-package))
 
 ;; ------------------------------------------------------------
-;; UTF-8
+;; UTF-8 & TeX input method
 ;; ------------------------------------------------------------
 
 ;; prefer UTF-8 by default
 (set-keyboard-coding-system 'mule-utf-8)
 (prefer-coding-system 'utf-8)
+
+;; setup TeX input method as default
+(setq default-input-method "TeX")
 
 ;; ------------------------------------------------------------
 ;; Global key bindings
