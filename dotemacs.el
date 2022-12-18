@@ -362,7 +362,6 @@ add_executable(" project " ${SOURCES})")
   :bind ([f9] . neotree-toggle))
 
 (use-package agda2-mode
-  :ensure t
   :mode "\\.agda\\'")
 
 (use-package adoc-mode
