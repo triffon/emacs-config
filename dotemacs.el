@@ -341,7 +341,7 @@ add_executable(" project " ${SOURCES})")
   :interpreter ("csharp" . csharp-mode))
 
 (use-package prolog
-  :ensure t
+  :ensure nil
   :mode ("\\.pro\\'" . prolog-mode))
 
 (use-package scala-mode
