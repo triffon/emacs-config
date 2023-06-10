@@ -370,6 +370,10 @@ add_executable(" project " ${SOURCES})")
   :ensure t
   :defer t)
 
+(use-package json-mode
+  :ensure t
+  :mode ("\\.json\\'" . json-mode))
+
 ;; ==================
 ;; Emacs as a C++ IDE
 ;; ==================
