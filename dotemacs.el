@@ -353,10 +353,6 @@ add_executable(" project " ${SOURCES})")
   :ensure t
   :mode ("\\.rs\\'" . rust-mode))
 
-(use-package perl6-mode
-  :ensure t
-  :defer t)
-
 (use-package neotree
   :ensure t
   :bind ([f9] . neotree-toggle))
