@@ -72,7 +72,6 @@
              '("melpa-stable" . "https://stable.melpa.org/packages/"))
 (add-to-list 'package-archives
              '("melpa" . "https://melpa.org/packages/"))
-(package-initialize)
 
 ;; bootstrap use-package
 (unless (package-installed-p 'use-package)
@@ -380,7 +379,6 @@ add_executable(" project " ${SOURCES})")
 
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
-(package-initialize)
 (let ((need-to-refresh t))
   (dolist (p lean4-mode-required-packages)
     (when (not (package-installed-p p))
