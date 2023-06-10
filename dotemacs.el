@@ -374,6 +374,23 @@ add_executable(" project " ${SOURCES})")
   :ensure t
   :mode ("\\.json\\'" . json-mode))
 
+(setq load-path (cons "~/.emacs.d/elisp/lean4-mode" load-path))
+
+(setq lean4-mode-required-packages '(dash f flycheck lsp-mode magit-section s))
+
+(require 'package)
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+(package-initialize)
+(let ((need-to-refresh t))
+  (dolist (p lean4-mode-required-packages)
+    (when (not (package-installed-p p))
+      (when need-to-refresh
+        (package-refresh-contents)
+        (setq need-to-refresh nil))
+      (package-install p))))
+
+(require 'lean4-mode)
+
 ;; ==================
 ;; Emacs as a C++ IDE
 ;; ==================

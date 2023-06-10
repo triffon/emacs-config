@@ -1,0 +1,3 @@
+[submodule "elisp/lean4-mode"]
+	path = elisp/lean4-mode
+	url = https://github.com/leanprover/lean4-mode.git
