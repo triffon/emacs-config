@@ -60,9 +60,6 @@
 ;; Package setup
 ;; ------------------------------------------------------------
 
-;; temporary fix for Bad Request issue when fetching ELPA package list until Emacs 26.3 comes out
-(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
-
 ;; load custom packages from here
 (add-to-list 'load-path "~/.emacs.d/elisp")
 
