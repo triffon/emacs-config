@@ -39,6 +39,7 @@
  '(minlog-el-path "~/minlog")
  '(minlog-path "~/minlog")
  '(mouse-wheel-mode t nil (mwheel))
+ '(neo-window-fixed-size nil)
  '(package-selected-packages
    '(typescript-mode prolog dockerfile-mode adoc-mode agda2-mode agda-mode exec-path-from-shell lsp-haskell lsp-treemacs company-lsp lsp-ui lsp-mode neotree markdown-mode perl6-mode rust-mode scala-mode scala yaml-mode csharp-mode diminish ghc ivy-rtags counsel swiper ivy auctex company company-ghc haskell-mode use-package auctex-latexmk flycheck-ghcmod company-auctex f helm helm-rtags s flycheck-irony flycheck-rtags flycheck company-irony-c-headers company-irony irony company-rtags racket-mode cmake-ide rtags muse multiple-cursors magit json-mode graphviz-dot-mode))
  '(python-shell-interpreter "python3")
