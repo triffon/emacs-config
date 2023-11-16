@@ -1,2 +1,6 @@
 # ignore byte-compiled files
 *.elc
+
+# ignore temporary files
+*~
+elisp/transient/
