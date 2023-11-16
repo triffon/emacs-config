@@ -41,13 +41,12 @@
  '(mouse-wheel-mode t nil (mwheel))
  '(neo-window-fixed-size nil)
  '(package-selected-packages
-   '(typescript-mode prolog dockerfile-mode adoc-mode agda2-mode agda-mode exec-path-from-shell lsp-haskell lsp-treemacs company-lsp lsp-ui lsp-mode neotree markdown-mode perl6-mode rust-mode scala-mode scala yaml-mode csharp-mode diminish ghc ivy-rtags counsel swiper ivy auctex company company-ghc haskell-mode use-package auctex-latexmk flycheck-ghcmod company-auctex f helm helm-rtags s flycheck-irony flycheck-rtags flycheck company-irony-c-headers company-irony irony company-rtags racket-mode cmake-ide rtags muse multiple-cursors magit json-mode graphviz-dot-mode))
+   '(typescript-mode prolog dockerfile-mode adoc-mode agda2-mode agda-mode exec-path-from-shell lsp-haskell lsp-treemacs company-lsp lsp-ui lsp-mode neotree markdown-mode perl6-mode rust-mode scala-mode scala yaml-mode csharp-mode diminish ghc counsel swiper ivy auctex company company-ghc haskell-mode use-package auctex-latexmk flycheck-ghcmod company-auctex f helm s flycheck racket-mode cmake-ide muse multiple-cursors magit json-mode graphviz-dot-mode))
  '(python-shell-interpreter "python3")
  '(scheme-program-name "mzscheme")
  '(scroll-bar-mode 'right)
  '(select-enable-clipboard t)
- '(sentence-end "[.?!][]\"')}]*\\($\\| $\\|	\\| \\)[
-]*")
+ '(sentence-end "[.?!][]\"')}]*\\($\\| $\\|\11\\| \\)[\12]*")
  '(sgml-basic-offset 8))
 
 (custom-set-faces
@@ -392,6 +391,11 @@ add_executable(" project " ${SOURCES})")
 ;; ==================
 ;; Source: http://syamajala.github.io/c-ide.html
 
+;; Advanced C++ support is disabled by default, I switched to using Codium instead
+;; change nil to 't to enable C++ support
+(setq c++-support-enabled nil)
+
+
 ;; configure cc-mode
 (use-package cc-mode
   ;; package loading deferred, will be loaded automatically upon opening a .{c,cpp,h,hpp} file
@@ -407,155 +411,160 @@ add_executable(" project " ${SOURCES})")
 ;; setup RTags
 ;; -----------
 
-(use-package rtags
-  :ensure t
-  ;; defer loading after 1 second to speed startup
-  :defer 1
-  :config
-  (message "Loaded rtags")
-  (setq rtags-autostart-diagnostics t)
-  ;; use standard C-c r <key> keybindings
-  (rtags-enable-standard-keybindings))
+(when c++-support-enabled
+  (use-package rtags
+    :ensure t
+    ;; defer loading after 1 second to speed startup
+    :defer 1
+    :config
+    (message "Loaded rtags")
+    (setq rtags-autostart-diagnostics t)
+    ;; use standard C-c r <key> keybindings
+    (rtags-enable-standard-keybindings))
 
-(use-package company-rtags
-  :ensure t
-  ;; load immediately after rtags
-  :after rtags
-  :init
-  (setq rtags-completions-enabled t)
-  :config
-  ;; add to company backends only after package is loaded
-  (add-to-list 'company-backends 'company-rtags))
+  (use-package company-rtags
+    :ensure t
+    ;; load immediately after rtags
+    :after rtags
+    :init
+    (setq rtags-completions-enabled t)
+    :config
+    ;; add to company backends only after package is loaded
+    (add-to-list 'company-backends 'company-rtags))
 
-(use-package ivy-rtags
-  :ensure t
-  ;; package is loaded automatically by rtags, no need to load manually
-  :defer t
-  :init
-  ;; use ivy autocompletion interface for displaying rtags suggestions
-  (setq rtags-display-result-backend 'ivy))
+  (use-package ivy-rtags
+    :ensure t
+    ;; package is loaded automatically by rtags, no need to load manually
+    :defer t
+    :init
+    ;; use ivy autocompletion interface for displaying rtags suggestions
+    (setq rtags-display-result-backend 'ivy))
 
 ;; -----------
 ;; setup Irony
 ;; -----------
 
-(use-package irony
-  :ensure t
-  :diminish irony-mode
-  ;; automatically load package when irony mode is triggerred
-  :commands irony-mode
-  :init
-  (add-hook 'c-mode-common-hook 'irony-mode)
-  ;; add Irony hooks for completion
-  (defun my-irony-mode-hook ()
-    (define-key irony-mode-map [remap completion-at-point]
-      'irony-completion-at-point-async)
-    (define-key irony-mode-map [remap complete-symbol]
-      'irony-completion-at-point-async))
-  (add-hook 'irony-mode-hook 'my-irony-mode-hook)
-  :config
-  ;; enable C++11 suppot for Irony
-  (setq irony-additional-clang-options '("-std=c++11"
-                                         "-I/usr/include/c++/"))
-  ;; automatically compile and install irony server if not already installed
-  (unless (condition-case nil
-              (irony--find-server-executable)
-            (error nil))
-    (call-interactively #'irony-install-server)))
+  (use-package irony
+    :ensure t
+    :diminish irony-mode
+    ;; automatically load package when irony mode is triggerred
+    :commands irony-mode
+    :init
+    (add-hook 'c-mode-common-hook 'irony-mode)
+    ;; add Irony hooks for completion
+    (defun my-irony-mode-hook ()
+      (define-key irony-mode-map [remap completion-at-point]
+                  'irony-completion-at-point-async)
+      (define-key irony-mode-map [remap complete-symbol]
+                  'irony-completion-at-point-async))
+    (add-hook 'irony-mode-hook 'my-irony-mode-hook)
+    :config
+    ;; enable C++11 support for Irony
+    (setq irony-additional-clang-options '("-std=c++11"
+                                           "-I/usr/include/c++/"))
+    ;; automatically compile and install irony server if not already installed
+    (unless (condition-case nil
+                (irony--find-server-executable)
+              (error nil))
+      (call-interactively #'irony-install-server)))
 
-(use-package company-irony
-  :ensure t
-  ;; load immediatley after irony
-  :after irony
-  :init
-  (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
-  (add-hook 'irony-mode-hook 'company-irony-setup-begin-commands)
-  :config
-  ;; remove company-semantic from backends due to conflicts
-  (setq company-backends (delete 'company-semantic company-backends))
-  ;; add company backend after the package is loaded
-  (add-to-list 'company-backends 'company-irony))
+  (use-package company-irony
+    :ensure t
+    ;; load immediatley after irony
+    :after irony
+    :init
+    (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+    (add-hook 'irony-mode-hook 'company-irony-setup-begin-commands)
+    :config
+    ;; remove company-semantic from backends due to conflicts
+    (setq company-backends (delete 'company-semantic company-backends))
+    ;; add company backend after the package is loaded
+    (add-to-list 'company-backends 'company-irony))
 
-(use-package company-irony-c-headers
-  :ensure t
-  ;; load immediatley after irony
-  :after irony
-  :config
-  ;; add company backend after the package is loaded
-  (add-to-list 'company-backends 'company-irony-c-headers))
+  (use-package company-irony-c-headers
+    :ensure t
+    ;; load immediatley after irony
+    :after irony
+    :config
+    ;; add company backend after the package is loaded
+    (add-to-list 'company-backends 'company-irony-c-headers))
 
 ;; -----------------------------------------------
 ;; Setup automatic error highlighting via Flycheck
 ;; -----------------------------------------------
 
-;; Disabling flycheck wiht Irony, preferring rtags
-(use-package flycheck-irony
-  :ensure t
-  :disabled
-  ;; defer loading, will be loaded automatically via the flycheck hooks
-  :defer t
-  ;; setup flycheck
-  :init
-  (add-hook 'c-mode-common-hook 'flycheck-mode)
-  (add-hook 'flycheck-mode-hook #'flycheck-irony-setup))
+  ;; Disabling flycheck wiht Irony, preferring rtags
+  (use-package flycheck-irony
+    :ensure t
+    :disabled
+    ;; defer loading, will be loaded automatically via the flycheck hooks
+    :defer t
+    ;; setup flycheck
+    :init
+    (add-hook 'c-mode-common-hook 'flycheck-mode)
+    (add-hook 'flycheck-mode-hook #'flycheck-irony-setup))
 
-(use-package flycheck-rtags
-  :ensure t
-  :after flycheck
-  :init
-  (defun my-flycheck-rtags-setup ()
-    (flycheck-select-checker 'rtags)
-    (setq-local flycheck-highlighting-mode nil) ;; RTags creates more accurate overlays.
-    (setq-local flycheck-check-syntax-automatically nil))
-  ;; setup flycheck
-  (add-hook 'c-mode-common-hook 'flycheck-mode)
-  (add-hook 'flycheck-mode-hook #'my-flycheck-rtags-setup))
+  (use-package flycheck-rtags
+    :ensure t
+    :after flycheck
+    :init
+    (defun my-flycheck-rtags-setup ()
+      (flycheck-select-checker 'rtags)
+      (setq-local flycheck-highlighting-mode nil) ;; RTags creates more accurate overlays.
+      (setq-local flycheck-check-syntax-automatically nil))
+    ;; setup flycheck
+    (add-hook 'c-mode-common-hook 'flycheck-mode)
+    (add-hook 'flycheck-mode-hook #'my-flycheck-rtags-setup))
 
-;; required for cmake-create-project interactive command
-(use-package f
-  :ensure t
-  :defer t)
+  ;; required for cmake-create-project interactive command
+  (use-package f
+    :ensure t
+    :defer t)
 
 ;; --------------------------------
 ;; Setup debugging with GUD and GDB
 ;; --------------------------------
 
-(use-package gdb
-  :ensure nil
-  ;; activated by the gdb command
-  :commands gdb
-  ;; configure keybindings for tracing
-  :bind ([f7] . gud-step)
-  :bind ([f8] . gud-next)
-  :bind ([C-S-f5] . gdb-many-windows))
+  (use-package gdb
+    :ensure nil
+    ;; activated by the gdb command
+    :commands gdb
+    ;; configure keybindings for tracing
+    :bind ([f7] . gud-step)
+    :bind ([f8] . gud-next)
+    :bind ([C-S-f5] . gdb-many-windows))
 
 ;; ---------------
 ;; setup CMake IDE
 ;; ---------------
 
-;; setup last to make sure that cmake-ide-build-dir is set as early as possible
-(use-package cmake-ide
-  :ensure t
-  ;; defer loading after 2 seconds to speed up Emacs start
-  :defer 2
-  ;; replace compile keybinding for CMake projects
-  :bind ([f12] . cmake-ide-compile)
-  ;; setup run and debug keybindings
-  :bind ([f5]  . cmake-ide-run)
-  :bind ([S-f5]  . quit-debugger)
-  :bind ([C-f5]  . cmake-ide-debug)
-  :init
-  ;; by default always set the cmake-ide-build-dir variable to <default-directory>/build
-  (defun set-cmake-ide-build-dir ()
-    ;; only if this is a CMake project, i.e., a CMakeLists.txt file exists
-    (when (file-exists-p (expand-file-name "CMakeLists.txt"))
-      (set (make-local-variable 'cmake-ide-build-dir)
-           (expand-file-name "build/"))))
-  (add-hook 'c-mode-common-hook 'set-cmake-ide-build-dir)
-  :config
-  ;; setup CMake IDE
-  (message "Setting up cmake-ide")
-  (cmake-ide-setup))
+  ;; setup last to make sure that cmake-ide-build-dir is set as early as possible
+  (use-package cmake-ide
+    :ensure t
+    ;; defer loading after 2 seconds to speed up Emacs start
+    :defer 2
+    ;; replace compile keybinding for CMake projects
+    :bind ([f12] . cmake-ide-compile)
+    ;; setup run and debug keybindings
+    :bind ([f5]  . cmake-ide-run)
+    :bind ([S-f5]  . quit-debugger)
+    :bind ([C-f5]  . cmake-ide-debug)
+    :init
+    ;; by default always set the cmake-ide-build-dir variable to <default-directory>/build
+    (defun set-cmake-ide-build-dir ()
+      ;; only if this is a CMake project, i.e., a CMakeLists.txt file exists
+      (when (file-exists-p (expand-file-name "CMakeLists.txt"))
+        (set (make-local-variable 'cmake-ide-build-dir)
+             (expand-file-name "build/"))))
+    (add-hook 'c-mode-common-hook 'set-cmake-ide-build-dir)
+    :config
+    ;; setup CMake IDE
+    (message "Setting up cmake-ide")
+    (cmake-ide-setup)))
+
+;; ----------------
+;; end of C++ setup
+;; ----------------
 
 ;; confivigure ivy
 (use-package ivy
